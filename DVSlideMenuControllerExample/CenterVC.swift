@@ -31,7 +31,15 @@ class CenterVC: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    @IBAction func toggleLeftAction(sender: AnyObject) {
+        toggleLeftPanel()
+    }
 
+    @IBAction func toggleRightAction(sender: AnyObject) {
+        toggleRightPanel()
+    }
+    
+    
     /*
     // MARK: - Navigation
 

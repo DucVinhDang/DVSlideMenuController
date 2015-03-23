@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6211" systemVersion="14A298i" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1514" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6204"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CenterVC" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CenterVC" customModule="DVSlideMenuControllerExample" customModuleProvider="target">
             <connections>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -13,7 +13,41 @@
         <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
             <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fsd-SV-NrX">
+                    <rect key="frame" x="262" y="189" width="76" height="30"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="76" id="jDj-5c-eXV"/>
+                        <constraint firstAttribute="height" constant="30" id="sAM-uv-O6h"/>
+                    </constraints>
+                    <state key="normal" title="Toggle Left">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="toggleLeftAction:" destination="-1" eventType="touchUpInside" id="qlK-vb-O9u"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Yre-kE-uSo">
+                    <rect key="frame" x="257" y="238" width="86" height="30"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="30" id="a5m-x4-c8a"/>
+                        <constraint firstAttribute="width" constant="86" id="irB-fN-Qgd"/>
+                    </constraints>
+                    <state key="normal" title="Toggle Right">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="toggleRightAction:" destination="-1" eventType="touchUpInside" id="KzG-Cc-EIo"/>
+                    </connections>
+                </button>
+            </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="centerX" secondItem="Yre-kE-uSo" secondAttribute="centerX" id="85M-fH-wYM"/>
+                <constraint firstAttribute="centerX" secondItem="fsd-SV-NrX" secondAttribute="centerX" id="VWx-FZ-0v1"/>
+                <constraint firstItem="fsd-SV-NrX" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="189" id="ejr-NG-TIb"/>
+                <constraint firstItem="Yre-kE-uSo" firstAttribute="top" secondItem="fsd-SV-NrX" secondAttribute="bottom" constant="19" id="kIG-3r-F7J"/>
+            </constraints>
         </view>
     </objects>
 </document>
