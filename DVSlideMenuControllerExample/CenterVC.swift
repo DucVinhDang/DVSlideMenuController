@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CenterVC: UIViewController {
+class CenterVC: UIViewController, DVSlideMenuControllerDelegate {
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
@@ -24,6 +24,7 @@ class CenterVC: UIViewController {
         self.addLeftToggleButtonWithImage(imageName: "MenuIcon")
         self.addRightToggleButtonWithImage(imageName: "MenuIcon")
         // Do any additional setup after loading the view.
+        dvSlideMenuController()?.delegate = self
     }
 
     override func didReceiveMemoryWarning() {
@@ -39,7 +40,39 @@ class CenterVC: UIViewController {
         toggleRightPanel()
     }
     
+    // DVSlideMenuControllerDelegate Methods
     
+    func dvSlideMenuControllerWillShowLeftPanel() {
+        println("Will show left panel")
+    }
+    
+    func dvSlideMenuControllerDidShowLeftPanel() {
+        println("Did show left panel")
+    }
+    
+    func dvSlideMenuControllerWillHideLeftPanel() {
+        println("Will hide left panel")
+    }
+    
+    func dvSlideMenuControllerDidHideLeftPanel() {
+        println("Did hide left panel")
+    }
+    
+    func dvSlideMenuControllerWillShowRightPanel() {
+        println("Will show right panel")
+    }
+    
+    func dvSlideMenuControllerDidShowRightPanel() {
+        println("Did show right panel")
+    }
+    
+    func dvSlideMenuControllerWillHideRightPanel() {
+        println("Will hide right panel")
+    }
+    
+    func dvSlideMenuControllerDidHideRightPanel() {
+        println("Did hide right panel")
+    }
     /*
     // MARK: - Navigation
 

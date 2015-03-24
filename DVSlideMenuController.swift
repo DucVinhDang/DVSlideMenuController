@@ -8,6 +8,18 @@
 
 import UIKit
 
+@objc protocol DVSlideMenuControllerDelegate {
+    optional func dvSlideMenuControllerWillShowLeftPanel()
+    optional func dvSlideMenuControllerDidShowLeftPanel()
+    optional func dvSlideMenuControllerWillHideLeftPanel()
+    optional func dvSlideMenuControllerDidHideLeftPanel()
+    
+    optional func dvSlideMenuControllerWillShowRightPanel()
+    optional func dvSlideMenuControllerDidShowRightPanel()
+    optional func dvSlideMenuControllerWillHideRightPanel()
+    optional func dvSlideMenuControllerDidHideRightPanel()
+}
+
 class DVSlideMenuController: UIViewController, UIGestureRecognizerDelegate {
     
     // MARK: - Setting Values
@@ -22,6 +34,7 @@ class DVSlideMenuController: UIViewController, UIGestureRecognizerDelegate {
     var leftViewController: UIViewController?
     var rightViewController: UIViewController?    
     var slidePanelCurrentState: SlidePanelCurrentState = .None
+    var delegate: DVSlideMenuControllerDelegate?
     let distanceOffset: CGFloat = 70
     let shadowOpacity: Float = 0.8
     let timeSliding = 0.5
@@ -29,7 +42,7 @@ class DVSlideMenuController: UIViewController, UIGestureRecognizerDelegate {
     var darkValue: CGFloat! { didSet { if (darkView != nil) { darkView?.alpha = darkValue! } } }
     var darkView: UIView?
     var allowPanGesture: Bool = true
-    
+    var existingPanelOnScreen = false
     
     // MARK: - Init Methods
     
@@ -97,7 +110,7 @@ class DVSlideMenuController: UIViewController, UIGestureRecognizerDelegate {
         view.addSubview(centerViewController.view)
         addChildViewController(centerViewController)
         centerViewController.didMoveToParentViewController(self)
-        if allowPanGesture { addPanGestureForSliding() }
+        addPanGestureForSliding()
     }
     
     func addLeftPanelViewController() {
@@ -159,9 +172,11 @@ class DVSlideMenuController: UIViewController, UIGestureRecognizerDelegate {
         } else {
             switch(slidePanelCurrentState) {
             case .Left:
+                delegate?.dvSlideMenuControllerWillHideLeftPanel?()
                 animateToTargetWithNewPositionX(newPositionX: -leftViewController!.view.bounds.width, showPanel: false)
                 removeShadowOpacityToView(viewToRemove: leftViewController!.view)
             case .Right:
+                delegate?.dvSlideMenuControllerWillHideRightPanel?()
                 animateToTargetWithNewPositionX(newPositionX: view.bounds.width, showPanel: false)
                 removeShadowOpacityToView(viewToRemove: rightViewController!.view)
             default:
@@ -179,7 +194,6 @@ class DVSlideMenuController: UIViewController, UIGestureRecognizerDelegate {
                 self.darkValue = 0.5
                 if !showPanel {
                     self.darkValue = 0
-                    self.slidePanelCurrentState = .None
                 }
             } else if self.slidePanelCurrentState == .Right {
                 self.view.bringSubviewToFront(self.rightViewController!.view)
@@ -187,22 +201,43 @@ class DVSlideMenuController: UIViewController, UIGestureRecognizerDelegate {
                 self.darkValue = 0.5
                 if !showPanel {
                     self.darkValue = 0
-                    self.slidePanelCurrentState = .None
                 }
             }
-        }, completion: completion)
-        if !showPanel {
-            if darkView != nil {
-                darkView?.removeFromSuperview()
-                darkView = nil
-            }
-            darkValue = originDarkValue
-        }
+            }, completion: { finished in
+                if !showPanel {
+                    if self.darkView != nil {
+                        self.darkView?.removeFromSuperview()
+                        self.darkView = nil
+                    }
+                    
+                    if self.slidePanelCurrentState == .Left {
+                        self.delegate?.dvSlideMenuControllerDidHideLeftPanel?()
+                    } else if self.slidePanelCurrentState == .Right {
+                        self.delegate?.dvSlideMenuControllerDidHideRightPanel?()
+                    }
+                    
+                    self.darkValue = self.originDarkValue
+                    self.slidePanelCurrentState = .None
+                    self.existingPanelOnScreen = false
+                    
+                } else {
+                    if !self.existingPanelOnScreen {
+                        self.existingPanelOnScreen = true
+                        if self.slidePanelCurrentState == .Left {
+                            self.delegate?.dvSlideMenuControllerDidShowLeftPanel?()
+                        } else if self.slidePanelCurrentState == .Right {
+                            self.delegate?.dvSlideMenuControllerDidShowRightPanel?()
+                        }
+                    }
+                }
+        })
+        
     }
     
     // MARK: - CenterViewControllerDelegate Methods //
     
     func toggleLeft() {
+        delegate?.dvSlideMenuControllerWillShowLeftPanel?()
         slidePanelCurrentState = .Left
         addShadowOpacityToView(currentView: leftViewController!.view, shadowValue: shadowOpacity)
         addDarkView()
@@ -210,6 +245,7 @@ class DVSlideMenuController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     func toggleRight() {
+        delegate?.dvSlideMenuControllerWillShowRightPanel?()
         slidePanelCurrentState = .Right
         addShadowOpacityToView(currentView: rightViewController!.view, shadowValue: shadowOpacity)
         addDarkView()
@@ -222,13 +258,14 @@ class DVSlideMenuController: UIViewController, UIGestureRecognizerDelegate {
     
     func hidePanel() {
         if slidePanelCurrentState == .Left {
+            delegate?.dvSlideMenuControllerWillHideLeftPanel?()
             animateToTargetWithNewPositionX(newPositionX: -view.bounds.width, showPanel: false)
             removeShadowOpacityToView(viewToRemove: leftViewController!.view)
         } else if slidePanelCurrentState == .Right {
+            delegate?.dvSlideMenuControllerWillHideRightPanel?()
             animateToTargetWithNewPositionX(newPositionX: view.bounds.width, showPanel: false)
             removeShadowOpacityToView(viewToRemove: rightViewController!.view)
         }
-        slidePanelCurrentState = .None
     }
     
     // MARK: - UIPanGestureRecognizer Methods //
@@ -247,14 +284,15 @@ class DVSlideMenuController: UIViewController, UIGestureRecognizerDelegate {
                 if slidePanelCurrentState == .None && leftViewController != nil {
                     slidePanelCurrentState = .Left
                     addShadowOpacityToView(currentView: leftViewController!.view, shadowValue: shadowOpacity)
+                    delegate?.dvSlideMenuControllerWillShowLeftPanel?()
                 }
             } else {
                 if slidePanelCurrentState == .None && rightViewController != nil {
                     slidePanelCurrentState = .Right
                     addShadowOpacityToView(currentView: rightViewController!.view, shadowValue: shadowOpacity)
+                    delegate?.dvSlideMenuControllerWillShowRightPanel?()
                 }
             }
-            
             addDarkView()
             if darkValue == nil { darkValue = originDarkValue }
             
@@ -311,6 +349,48 @@ class DVSlideMenuController: UIViewController, UIGestureRecognizerDelegate {
         default:
             break
         }
+    }
+    
+    // MARK: - DVSlideMenuControllerDelegate Methods
+//    optional func dvSlideMenuControllerWillShowLeftPanel()
+//    optional func dvSlideMenuControllerWillShowRightPanel()
+//    optional func dvSlideMenuControllerDidShowLeftPanel()
+//    optional func dvSlideMenuControllerDidShowRightPanel()
+//    optional func dvSlideMenuControllerWillHideLeftPanel()
+//    optional func dvSlideMenuControllerWillHideRightPanel()
+//    optional func dvSlideMenuControllerDidHideLeftPanel()
+//    optional func dvSlideMenuControllerDidHideRightPanel()
+    
+    func delegateWillShowLeftPanel() {
+        
+    }
+    
+    func delegateWillShowRightPanel() {
+        
+    }
+    
+    func delegateDidShowLeftPanel() {
+        
+    }
+    
+    func delegateDidShowRightPanel() {
+        
+    }
+    
+    func delegateWillHideLeftPanel() {
+        
+    }
+    
+    func delegateWillHideRightPanel() {
+        
+    }
+    
+    func delegateDidHideLeftPanel() {
+        
+    }
+    
+    func delegateDidHideRightPanel() {
+        
     }
     
     // MARK: - UIBarButtonItem Methods //
