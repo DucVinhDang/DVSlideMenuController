@@ -54,6 +54,15 @@ dvSlideMenuController()?.setCenterViewController(newCenterViewController)
 ```
 
 ## Detect DVSlideMenuController states
+Add DVSlideMenuControllerDelegate in your class like this
+```
+class CenterVC: UIViewController, DVSlideMenuControllerDelegate { ... }
+```
+Then, you add this code in viewDidLoad() or somewhere if you want
+```
+dvSlideMenuController()?.delegate = self
+```
+Now, you can use one of these methods below:
 ```
 optional func dvSlideMenuControllerWillShowLeftPanel()
 optional func dvSlideMenuControllerDidShowLeftPanel()
