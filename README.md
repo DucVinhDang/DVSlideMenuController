@@ -52,3 +52,16 @@ hideThisPanel()
 ```
 dvSlideMenuController()?.setCenterViewController(newCenterViewController)
 ```
+
+## Detect DVSlideMenuController states
+```
+optional func dvSlideMenuControllerWillShowLeftPanel()
+optional func dvSlideMenuControllerDidShowLeftPanel()
+optional func dvSlideMenuControllerWillHideLeftPanel()
+optional func dvSlideMenuControllerDidHideLeftPanel()
+
+optional func dvSlideMenuControllerWillShowRightPanel()
+optional func dvSlideMenuControllerDidShowRightPanel()
+optional func dvSlideMenuControllerWillHideRightPanel()
+optional func dvSlideMenuControllerDidHideRightPanel()
+```
