@@ -40,6 +40,12 @@ class CenterVC: UIViewController, DVSlideMenuControllerDelegate {
         toggleRightPanel()
     }
     
+    @IBAction func newViewAction(sender: AnyObject) {
+        let detailCenterVC = DetailCenterVC(nibName: "DetailCenterVC", bundle: nil)
+    self.navigationController?.pushViewController(detailCenterVC, animated: true)
+    }
+    
+    
     // DVSlideMenuControllerDelegate Methods
     
     func dvSlideMenuControllerWillShowLeftPanel() {

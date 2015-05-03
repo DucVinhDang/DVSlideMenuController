@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A30151AD1AF60A1100224186 /* DetailCenterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30151AB1AF60A1100224186 /* DetailCenterVC.swift */; };
+		A30151AE1AF60A1100224186 /* DetailCenterVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = A30151AC1AF60A1100224186 /* DetailCenterVC.xib */; };
 		A389232F1AC038DB00F37726 /* LeftVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A389232D1AC038DB00F37726 /* LeftVC.swift */; };
 		A38923301AC038DB00F37726 /* LeftVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = A389232E1AC038DB00F37726 /* LeftVC.xib */; };
 		A38923331AC038FD00F37726 /* RightVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A38923311AC038FD00F37726 /* RightVC.swift */; };
@@ -33,6 +35,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A30151AB1AF60A1100224186 /* DetailCenterVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailCenterVC.swift; sourceTree = "<group>"; };
+		A30151AC1AF60A1100224186 /* DetailCenterVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DetailCenterVC.xib; sourceTree = "<group>"; };
 		A389232D1AC038DB00F37726 /* LeftVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeftVC.swift; sourceTree = "<group>"; };
 		A389232E1AC038DB00F37726 /* LeftVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LeftVC.xib; sourceTree = "<group>"; };
 		A38923311AC038FD00F37726 /* RightVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RightVC.swift; sourceTree = "<group>"; };
@@ -145,6 +149,8 @@
 				A38923321AC038FD00F37726 /* RightVC.xib */,
 				A38923351AC0496600F37726 /* NewCenterVC.swift */,
 				A38923361AC0496600F37726 /* NewCenterVC.xib */,
+				A30151AB1AF60A1100224186 /* DetailCenterVC.swift */,
+				A30151AC1AF60A1100224186 /* DetailCenterVC.xib */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -235,6 +241,7 @@
 				A3D494EE1AC0379A00508D1F /* Images.xcassets in Resources */,
 				A38923381AC0496600F37726 /* NewCenterVC.xib in Resources */,
 				A38923301AC038DB00F37726 /* LeftVC.xib in Resources */,
+				A30151AE1AF60A1100224186 /* DetailCenterVC.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -256,6 +263,7 @@
 				A3D4950C1AC037DB00508D1F /* CenterVC.swift in Sources */,
 				A3D495081AC037C700508D1F /* DVSlideMenuController.swift in Sources */,
 				A38923331AC038FD00F37726 /* RightVC.swift in Sources */,
+				A30151AD1AF60A1100224186 /* DetailCenterVC.swift in Sources */,
 				A3D494E71AC0379A00508D1F /* AppDelegate.swift in Sources */,
 				A389232F1AC038DB00F37726 /* LeftVC.swift in Sources */,
 			);

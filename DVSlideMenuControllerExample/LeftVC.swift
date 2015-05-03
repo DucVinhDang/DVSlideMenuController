@@ -67,14 +67,14 @@ class LeftVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
             let navNewCenter = UINavigationController(rootViewController: newCenterVC)
             newCenterVC.addLeftToggleButtonWithTitle(title: "Left")
             newCenterVC.addRightToggleButtonWithTitle(title: "Right")
-            dvSlideMenuController()?.setCenterViewController(navNewCenter)
+            dvSlideMenuController()?.setTheCenterViewController(navNewCenter)
             hideThisPanel()
         case 2:
             hideThisPanel()
         case 3:
             let centerVC = CenterVC(nibName: "CenterVC", bundle: nil)
             let navCenter = UINavigationController(rootViewController: centerVC)
-            dvSlideMenuController()?.setCenterViewController(navCenter)
+            dvSlideMenuController()?.setTheCenterViewController(navCenter)
             hideThisPanel()
         default:
             break;
