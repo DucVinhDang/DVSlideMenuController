@@ -35,6 +35,8 @@ class DVSlideMenuController: UIViewController, UIGestureRecognizerDelegate {
     var rightViewController: UIViewController?    
     var slidePanelCurrentState: SlidePanelCurrentState = .None
     var delegate: DVSlideMenuControllerDelegate?
+    let deviceWidth = UIScreen.mainScreen().bounds.width
+    let deviceHeight = UIScreen.mainScreen().bounds.height
     let distanceOffset: CGFloat = 70
     let shadowOpacity: Float = 0.8
     let timeSliding = 0.5

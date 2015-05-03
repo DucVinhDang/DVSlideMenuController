@@ -35,6 +35,8 @@ class DVSlideMenuController: UIViewController, UIGestureRecognizerDelegate {
     var rightViewController: UIViewController?    
     var slidePanelCurrentState: SlidePanelCurrentState = .None
     var delegate: DVSlideMenuControllerDelegate?
+    let deviceWidth = UIScreen.mainScreen().bounds.width
+    let deviceHeight = UIScreen.mainScreen().bounds.height
     let distanceOffset: CGFloat = 70
     let shadowOpacity: Float = 0.8
     let timeSliding = 0.5
@@ -96,9 +98,17 @@ class DVSlideMenuController: UIViewController, UIGestureRecognizerDelegate {
     
     override func willRotateToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
         if toInterfaceOrientation.isLandscape {
-            rightViewController?.view.frame.origin.x = view.bounds.height
+            if(slidePanelCurrentState == .Right) {
+                rightViewController?.view.frame.origin.x = view.bounds.height - rightViewController!.view.bounds.width
+            } else {
+                rightViewController?.view.frame.origin.x = view.bounds.height
+            }
         } else if toInterfaceOrientation.isPortrait {
-            rightViewController?.view.frame.origin.x = view.bounds.width
+            if(slidePanelCurrentState == .Right) {
+                rightViewController?.view.frame.origin.x = distanceOffset
+            } else {
+                rightViewController?.view.frame.origin.x = view.bounds.width
+            }
         }
     }
     
@@ -137,7 +147,7 @@ class DVSlideMenuController: UIViewController, UIGestureRecognizerDelegate {
         panelVC.didMoveToParentViewController(self)
     }
     
-    func setCenterViewController(centerVC: UIViewController) {
+    func setTheCenterViewController(centerVC: UIViewController) {
         if centerViewController != nil {
             centerViewController.willMoveToParentViewController(nil)
             centerViewController.view.removeFromSuperview()
@@ -145,7 +155,7 @@ class DVSlideMenuController: UIViewController, UIGestureRecognizerDelegate {
             
             if let recognizers = view.gestureRecognizers {
                 for recognizer in recognizers {
-                    view.removeGestureRecognizer(recognizer as UIGestureRecognizer)
+                    view.removeGestureRecognizer(recognizer as! UIGestureRecognizer)
                 }
             }
         }
@@ -435,12 +445,12 @@ extension UIViewController {
     }
     
     func addLeftToggleButtonWithTitle(#title: String) {
-        var leftBarButtonItem = UIBarButtonItem(title: title, style: UIBarButtonItemStyle.Bordered, target: self, action: Selector("toggleLeftPanel"))
+        var leftBarButtonItem = UIBarButtonItem(title: title, style: UIBarButtonItemStyle.Plain, target: self, action: Selector("toggleLeftPanel"))
         self.navigationItem.setLeftBarButtonItem(leftBarButtonItem, animated: true)
     }
     
     func addRightToggleButtonWithTitle(#title: String) {
-        var rightBarButtonItem = UIBarButtonItem(title: title, style: UIBarButtonItemStyle.Bordered, target: self, action: Selector("toggleRightPanel"))
+        var rightBarButtonItem = UIBarButtonItem(title: title, style: UIBarButtonItemStyle.Plain, target: self, action: Selector("toggleRightPanel"))
         self.navigationItem.setRightBarButtonItem(rightBarButtonItem, animated: true)
     }
     
