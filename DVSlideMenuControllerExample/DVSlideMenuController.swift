@@ -30,11 +30,14 @@ class DVSlideMenuController: UIViewController, UIGestureRecognizerDelegate {
         case None
     }
     
-    var centerViewController: UIViewController!
-    var leftViewController: UIViewController?
-    var rightViewController: UIViewController?    
+    weak var centerViewController: UIViewController!
+    weak var leftViewController: UIViewController?
+    weak var rightViewController: UIViewController?
+    weak var darkView: UIView?
+    weak var delegate: DVSlideMenuControllerDelegate?
+    
     var slidePanelCurrentState: SlidePanelCurrentState = .None
-    var delegate: DVSlideMenuControllerDelegate?
+    
     let deviceWidth = UIScreen.mainScreen().bounds.width
     let deviceHeight = UIScreen.mainScreen().bounds.height
     let distanceOffset: CGFloat = 70
@@ -42,7 +45,7 @@ class DVSlideMenuController: UIViewController, UIGestureRecognizerDelegate {
     let timeSliding = 0.5
     let originDarkValue: CGFloat = 0.01
     var darkValue: CGFloat! { didSet { if (darkView != nil) { darkView?.alpha = darkValue! } } }
-    var darkView: UIView?
+    
     var allowPanGesture: Bool = true
     var existingPanelOnScreen = false
     
@@ -152,6 +155,7 @@ class DVSlideMenuController: UIViewController, UIGestureRecognizerDelegate {
             centerViewController.willMoveToParentViewController(nil)
             centerViewController.view.removeFromSuperview()
             centerViewController.removeFromParentViewController()
+            centerViewController = nil
             
             if let recognizers = view.gestureRecognizers {
                 for recognizer in recognizers {
@@ -203,20 +207,24 @@ class DVSlideMenuController: UIViewController, UIGestureRecognizerDelegate {
                         self.darkView = nil
                     }
                     
-                    if self.slidePanelCurrentState == .Left {
-                        self.delegate?.dvSlideMenuControllerDidHideLeftPanel?()
-                    } else if self.slidePanelCurrentState == .Right {
-                        self.delegate?.dvSlideMenuControllerDidHideRightPanel?()
+                    if self.delegate != nil {
+                        if self.slidePanelCurrentState == .Left {
+                            self.delegate?.dvSlideMenuControllerDidHideLeftPanel?()
+                        } else if self.slidePanelCurrentState == .Right {
+                            self.delegate?.dvSlideMenuControllerDidHideRightPanel?()
+                        }
                     }
                     
                     self.darkValue = self.originDarkValue
                     self.slidePanelCurrentState = .None
                     
                 } else {
-                    if self.slidePanelCurrentState == .Left {
-                        self.delegate?.dvSlideMenuControllerDidShowLeftPanel?()
-                    } else if self.slidePanelCurrentState == .Right {
-                        self.delegate?.dvSlideMenuControllerDidShowRightPanel?()
+                    if self.delegate != nil {
+                        if self.slidePanelCurrentState == .Left {
+                            self.delegate?.dvSlideMenuControllerDidShowLeftPanel?()
+                        } else if self.slidePanelCurrentState == .Right {
+                            self.delegate?.dvSlideMenuControllerDidShowRightPanel?()
+                        }
                     }
                 }
             })
@@ -317,12 +325,13 @@ class DVSlideMenuController: UIViewController, UIGestureRecognizerDelegate {
     
     func addDarkView() {
         if darkView == nil {
-            darkView = UIView(frame: centerViewController.view.frame)
-            darkView?.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
-            darkView?.backgroundColor = UIColor.blackColor()
-            darkView?.alpha = 0
-            darkView?.userInteractionEnabled = false
-            centerViewController.view.addSubview(darkView!)
+            var dView = UIView(frame: centerViewController.view.frame)
+            dView.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
+            dView.backgroundColor = UIColor.blackColor()
+            dView.alpha = 0
+            dView.userInteractionEnabled = false
+            centerViewController.view.addSubview(dView)
+            darkView = dView
         }
     }
     
