@@ -24,7 +24,7 @@ class CenterVC: UIViewController, DVSlideMenuControllerDelegate {
         self.addLeftToggleButtonWithImage(imageName: "MenuIcon")
         self.addRightToggleButtonWithImage(imageName: "MenuIcon")
         // Do any additional setup after loading the view.
-        dvSlideMenuController()?.delegate = self
+//        dvSlideMenuController()?.delegate = self
     }
 
     override func didReceiveMemoryWarning() {

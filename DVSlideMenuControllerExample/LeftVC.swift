@@ -28,7 +28,8 @@ class LeftVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         self.tableView.tableFooterView = UIView(frame: CGRectZero)
-        self.tableView.backgroundColor = UIColor(red: 0.945, green: 0.945, blue: 0.945, alpha: 1)
+//        self.tableView.backgroundColor = UIColor(red: 0.945, green: 0.945, blue: 0.945, alpha: 1)
+        self.tableView.backgroundColor = UIColor.clearColor()
     }
 
     override func didReceiveMemoryWarning() {
@@ -45,9 +46,12 @@ class LeftVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: "Cell")
         cell.textLabel?.text = array[indexPath.row]
+        cell.textLabel?.textColor = UIColor.whiteColor()
         cell.detailTextLabel?.text = detailArray[indexPath.row]
+        cell.detailTextLabel?.textColor = UIColor.whiteColor()
         cell.detailTextLabel?.numberOfLines = 3
         cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
+        cell.backgroundColor = UIColor.clearColor()
         return cell
     }
     
