@@ -198,8 +198,18 @@ class DVSlideMenuController: UIViewController, UIGestureRecognizerDelegate {
                 self.view.bringSubviewToFront(self.rightViewController!.view)
                 self.rightViewController?.view.frame.origin.x = newPositionX
             }
+            
             if showPanel { self.darkValue = 0.5 }
-            else { self.darkValue = 0 }
+            else {
+                self.darkValue = 0
+                if UIDevice.currentDevice().orientation.isLandscape.boolValue {
+                    self.centerViewController!.view.center.x = self.deviceHeight/2
+                } else if UIDevice.currentDevice().orientation.isPortrait.boolValue {
+                    self.centerViewController!.view.center.x = self.deviceWidth/2
+                }
+                
+            }
+            
             }, completion: { finished in
                 if !showPanel {
                     if self.darkView != nil {
@@ -274,34 +284,41 @@ class DVSlideMenuController: UIViewController, UIGestureRecognizerDelegate {
     
     func handleSlidePanel(panGesture: UIPanGestureRecognizer) {
         let dragFromLeftToRight = panGesture.velocityInView(view).x > 0
-        
+
         switch(panGesture.state) {
         case .Began:
-            if dragFromLeftToRight {
-                if slidePanelCurrentState == .None && leftViewController != nil {
-                    delegate?.dvSlideMenuControllerWillShowLeftPanel?()
-                    slidePanelCurrentState = .Left
-                    addShadowOpacityToView(currentView: leftViewController!.view, shadowValue: shadowOpacity)
-                    addDarkView()
-                    if darkValue == nil { darkValue = originDarkValue }
+            if slidePanelCurrentState == .None {
+                if dragFromLeftToRight {
+                    if leftViewController != nil {
+                        delegate?.dvSlideMenuControllerWillShowLeftPanel?()
+                        slidePanelCurrentState = .Left
+                        addShadowOpacityToView(currentView: leftViewController!.view, shadowValue: shadowOpacity)
+                    }
+                } else {
+                    if rightViewController != nil {
+                        delegate?.dvSlideMenuControllerWillShowRightPanel?()
+                        slidePanelCurrentState = .Right
+                        addShadowOpacityToView(currentView: rightViewController!.view, shadowValue: shadowOpacity)
+                    }
                 }
-            } else {
-                if slidePanelCurrentState == .None && rightViewController != nil {
-                    delegate?.dvSlideMenuControllerWillShowRightPanel?()
-                    slidePanelCurrentState = .Right
-                    addShadowOpacityToView(currentView: rightViewController!.view, shadowValue: shadowOpacity)
-                    addDarkView()
-                    if darkValue == nil { darkValue = originDarkValue }
-                }
+                addDarkView()
+                if darkValue == nil { darkValue = originDarkValue }
             }
-            
             
         case .Changed:
             if slidePanelCurrentState != .None {
                 if slidePanelCurrentState == .Left && CGRectGetMinX(leftViewController!.view.frame) <= 0 {
-                    leftViewController!.view.center.x = leftViewController!.view.center.x + panGesture.translationInView(view).x
+                    if(CGRectGetMinX(leftViewController!.view.frame) >= 0 && dragFromLeftToRight) {
+                        return
+                    }
+                    leftViewController!.view.center.x += panGesture.translationInView(view).x
+                    centerViewController!.view.center.x += panGesture.translationInView(view).x/2
                 } else if slidePanelCurrentState == .Right && CGRectGetMaxX(rightViewController!.view.frame) >= view.frame.width {
-                    rightViewController!.view.center.x = rightViewController!.view.center.x + panGesture.translationInView(view).x
+                    if(CGRectGetMaxX(rightViewController!.view.frame) <= view.frame.width && !dragFromLeftToRight) {
+                        return
+                    }
+                    rightViewController!.view.center.x += panGesture.translationInView(view).x
+                    centerViewController!.view.center.x += panGesture.translationInView(view).x/2
                 }
                 panGesture.setTranslation(CGPointZero, inView: view)
                 setDarkValue()

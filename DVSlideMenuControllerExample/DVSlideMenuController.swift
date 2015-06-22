@@ -129,7 +129,7 @@ class DVSlideMenuController: UIViewController, UIGestureRecognizerDelegate {
     func addLeftPanelViewController() {
         if leftViewController != nil {
             leftViewController?.view.frame = CGRectMake(0, 0, view.bounds.width - distanceOffset, view.bounds.height)
-            leftViewController?.view.autoresizingMask = UIViewAutoresizing.FlexibleHeight
+            leftViewController?.view.autoresizingMask = UIViewAutoresizing.FlexibleHeight | UIViewAutoresizing.FlexibleWidth
             leftViewController?.view.center = CGPoint(x: -(view.bounds.width - distanceOffset)/2, y: view.bounds.height/2)
             addChildPanelViewController(leftViewController!)
         }
@@ -138,7 +138,7 @@ class DVSlideMenuController: UIViewController, UIGestureRecognizerDelegate {
     func addRightPanelViewController() {
         if rightViewController != nil {
             rightViewController?.view.frame = CGRectMake(0, 0, view.bounds.width - distanceOffset, view.bounds.height)
-            rightViewController?.view.autoresizingMask = UIViewAutoresizing.FlexibleHeight
+            rightViewController?.view.autoresizingMask = UIViewAutoresizing.FlexibleHeight | UIViewAutoresizing.FlexibleWidth
             rightViewController?.view.center = CGPoint(x: view.bounds.width + (view.bounds.width - distanceOffset)/2, y: view.bounds.height/2)
             addChildPanelViewController(rightViewController!)
         }
@@ -346,7 +346,7 @@ class DVSlideMenuController: UIViewController, UIGestureRecognizerDelegate {
             dView.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
             dView.backgroundColor = UIColor.blackColor()
             dView.alpha = 0
-            dView.userInteractionEnabled = false
+            dView.userInteractionEnabled = true
             centerViewController.view.addSubview(dView)
             darkView = dView
         }
