@@ -18,8 +18,8 @@
                     <rect key="frame" x="262" y="189" width="76" height="30"/>
                     <animations/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="76" id="jDj-5c-eXV"/>
-                        <constraint firstAttribute="height" constant="30" id="sAM-uv-O6h"/>
+                        <constraint firstAttribute="height" constant="30" id="Zyl-gw-V0s"/>
+                        <constraint firstAttribute="width" constant="76" id="tY5-md-aMT"/>
                     </constraints>
                     <state key="normal" title="Toggle Left">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -33,8 +33,8 @@
                     <rect key="frame" x="257" y="238" width="86" height="30"/>
                     <animations/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="30" id="a5m-x4-c8a"/>
-                        <constraint firstAttribute="width" constant="86" id="irB-fN-Qgd"/>
+                        <constraint firstAttribute="width" constant="86" id="EYO-KY-eor"/>
+                        <constraint firstAttribute="height" constant="30" id="SeO-Re-lid"/>
                     </constraints>
                     <state key="normal" title="Toggle Right">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -48,8 +48,8 @@
                     <rect key="frame" x="238" y="285" width="125" height="30"/>
                     <animations/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="125" id="4iQ-ZM-9eK"/>
-                        <constraint firstAttribute="height" constant="30" id="U3s-xK-FWr"/>
+                        <constraint firstAttribute="width" constant="125" id="0a9-oC-fGY"/>
+                        <constraint firstAttribute="height" constant="30" id="OnN-hO-itf"/>
                     </constraints>
                     <state key="normal" title="Move to new View">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -63,12 +63,12 @@
             <animations/>
             <color key="backgroundColor" red="0.16195472552340304" green="0.16601979087030097" blue="0.1782149869109948" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
-                <constraint firstAttribute="centerX" secondItem="Yre-kE-uSo" secondAttribute="centerX" id="85M-fH-wYM"/>
-                <constraint firstItem="iNa-iu-bvq" firstAttribute="top" secondItem="Yre-kE-uSo" secondAttribute="bottom" constant="17" id="UoT-zD-SGy"/>
-                <constraint firstAttribute="centerX" secondItem="fsd-SV-NrX" secondAttribute="centerX" id="VWx-FZ-0v1"/>
-                <constraint firstItem="fsd-SV-NrX" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="189" id="ejr-NG-TIb"/>
-                <constraint firstAttribute="centerX" secondItem="iNa-iu-bvq" secondAttribute="centerX" id="h5l-Or-1rj"/>
-                <constraint firstItem="Yre-kE-uSo" firstAttribute="top" secondItem="fsd-SV-NrX" secondAttribute="bottom" constant="19" id="kIG-3r-F7J"/>
+                <constraint firstItem="iNa-iu-bvq" firstAttribute="top" secondItem="Yre-kE-uSo" secondAttribute="bottom" constant="17" id="Dmx-5R-w4n"/>
+                <constraint firstAttribute="centerY" secondItem="fsd-SV-NrX" secondAttribute="centerY" constant="96" id="IcM-3T-lnD"/>
+                <constraint firstAttribute="centerX" secondItem="iNa-iu-bvq" secondAttribute="centerX" id="NNX-yz-5wd"/>
+                <constraint firstAttribute="centerX" secondItem="fsd-SV-NrX" secondAttribute="centerX" id="Qvn-gG-30y"/>
+                <constraint firstAttribute="centerX" secondItem="Yre-kE-uSo" secondAttribute="centerX" id="aBY-2W-A9y"/>
+                <constraint firstItem="Yre-kE-uSo" firstAttribute="top" secondItem="fsd-SV-NrX" secondAttribute="bottom" constant="19" id="zZD-mU-oql"/>
             </constraints>
         </view>
     </objects>
