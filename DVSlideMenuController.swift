@@ -35,6 +35,8 @@ class DVSlideMenuController: UIViewController, UIGestureRecognizerDelegate {
     weak var rightViewController: UIViewController?
     weak var darkView: UIView?
     weak var delegate: DVSlideMenuControllerDelegate?
+    weak var panGesture: UIPanGestureRecognizer?
+    weak var darkViewTapGesture: UITapGestureRecognizer?
     
     var slidePanelCurrentState: SlidePanelCurrentState = .None
     
@@ -42,7 +44,7 @@ class DVSlideMenuController: UIViewController, UIGestureRecognizerDelegate {
     let deviceHeight = UIScreen.mainScreen().bounds.height
     let distanceOffset: CGFloat = 70
     let shadowOpacity: Float = 0.8
-    let timeSliding = 0.5
+    let timeSliding = 0.3
     let originDarkValue: CGFloat = 0.01
     var darkValue: CGFloat! { didSet { if (darkView != nil) { darkView?.alpha = darkValue! } } }
     
@@ -162,6 +164,8 @@ class DVSlideMenuController: UIViewController, UIGestureRecognizerDelegate {
                     view.removeGestureRecognizer(recognizer as! UIGestureRecognizer)
                 }
             }
+            
+            if self.panGesture != nil { panGesture = nil }
         }
         centerViewController = centerVC
         addCenterViewController()
@@ -190,13 +194,23 @@ class DVSlideMenuController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     func animatePanelWithNewPositionX(#newPositionX: CGFloat, showPanel: Bool, completion: ((Bool) -> Void)! = nil) {
-        UIView.animateWithDuration(timeSliding, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: .CurveEaseInOut, animations: {
+        UIView.animateWithDuration(timeSliding, animations: {
+            
             if self.slidePanelCurrentState == .Left {
-                self.view.bringSubviewToFront(self.leftViewController!.view)
+                var distanceOfCenterToGo = abs(Int(CGRectGetMinX(self.leftViewController!.view.frame))/2)
+                //self.view.bringSubviewToFront(self.leftViewController!.view)
                 self.leftViewController?.view.frame.origin.x = newPositionX
+                self.centerViewController.view.center = CGPoint(x: self.centerViewController.view.center.x + CGFloat(distanceOfCenterToGo), y: self.centerViewController.view.center.y)
             } else if self.slidePanelCurrentState == .Right {
-                self.view.bringSubviewToFront(self.rightViewController!.view)
+                var distanceOfCenterToGo: Int = 0
+                if UIDevice.currentDevice().orientation.isLandscape.boolValue {
+                    distanceOfCenterToGo = abs(Int((self.distanceOffset + self.view.bounds.width - self.view.bounds.height) - CGRectGetMinX(self.rightViewController!.view.frame))/2)
+                } else if UIDevice.currentDevice().orientation.isPortrait.boolValue {
+                    distanceOfCenterToGo = abs(Int(self.distanceOffset - CGRectGetMinX(self.rightViewController!.view.frame))/2)
+                }
+                //self.view.bringSubviewToFront(self.rightViewController!.view)
                 self.rightViewController?.view.frame.origin.x = newPositionX
+                self.centerViewController.view.center = CGPoint(x: self.centerViewController.view.center.x - CGFloat(distanceOfCenterToGo), y: self.centerViewController.view.center.y)
             }
             
             if showPanel { self.darkValue = 0.5 }
@@ -213,6 +227,12 @@ class DVSlideMenuController: UIViewController, UIGestureRecognizerDelegate {
             }, completion: { finished in
                 if !showPanel {
                     if self.darkView != nil {
+                        if let recognizers = self.darkView!.gestureRecognizers {
+                            for recognizer in recognizers {
+                                self.darkView!.removeGestureRecognizer(recognizer as! UIGestureRecognizer)
+                            }
+                        }
+                        if self.darkViewTapGesture != nil { self.darkViewTapGesture = nil }
                         self.darkView?.removeFromSuperview()
                         self.darkView = nil
                     }
@@ -246,6 +266,7 @@ class DVSlideMenuController: UIViewController, UIGestureRecognizerDelegate {
     func toggleLeft() {
         delegate?.dvSlideMenuControllerWillShowLeftPanel?()
         slidePanelCurrentState = .Left
+        self.view.bringSubviewToFront(self.leftViewController!.view)
         addShadowOpacityToView(currentView: leftViewController!.view, shadowValue: shadowOpacity)
         addDarkView()
         animatePanelWithNewPositionX(newPositionX: 0, showPanel: true)
@@ -254,6 +275,7 @@ class DVSlideMenuController: UIViewController, UIGestureRecognizerDelegate {
     func toggleRight() {
         delegate?.dvSlideMenuControllerWillShowRightPanel?()
         slidePanelCurrentState = .Right
+        self.view.bringSubviewToFront(self.rightViewController!.view)
         addShadowOpacityToView(currentView: rightViewController!.view, shadowValue: shadowOpacity)
         addDarkView()
         if UIDevice.currentDevice().orientation.isLandscape.boolValue {
@@ -278,8 +300,9 @@ class DVSlideMenuController: UIViewController, UIGestureRecognizerDelegate {
     // MARK: - UIPanGestureRecognizer Methods //
     
     func addPanGestureForSliding() {
-        let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: "handleSlidePanel:")
+        var panGestureRecognizer = UIPanGestureRecognizer(target: self, action: "handleSlidePanel:")
         centerViewController.view.addGestureRecognizer(panGestureRecognizer)
+        self.panGesture = panGestureRecognizer
     }
     
     func handleSlidePanel(panGesture: UIPanGestureRecognizer) {
@@ -292,12 +315,14 @@ class DVSlideMenuController: UIViewController, UIGestureRecognizerDelegate {
                     if leftViewController != nil {
                         delegate?.dvSlideMenuControllerWillShowLeftPanel?()
                         slidePanelCurrentState = .Left
+                        self.view.bringSubviewToFront(self.leftViewController!.view)
                         addShadowOpacityToView(currentView: leftViewController!.view, shadowValue: shadowOpacity)
                     }
                 } else {
                     if rightViewController != nil {
                         delegate?.dvSlideMenuControllerWillShowRightPanel?()
                         slidePanelCurrentState = .Right
+                        self.view.bringSubviewToFront(self.rightViewController!.view)
                         addShadowOpacityToView(currentView: rightViewController!.view, shadowValue: shadowOpacity)
                     }
                 }
@@ -338,6 +363,12 @@ class DVSlideMenuController: UIViewController, UIGestureRecognizerDelegate {
         
     }
     
+    // MARK: - UITapGestureRecognizer Methods
+    
+    func handleTapGestureOnDarkView(tapGesture: UITapGestureRecognizer) {
+        hidePanel()
+    }
+    
     // MARK: - Supporting Methods //
     
     func addDarkView() {
@@ -346,8 +377,12 @@ class DVSlideMenuController: UIViewController, UIGestureRecognizerDelegate {
             dView.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
             dView.backgroundColor = UIColor.blackColor()
             dView.alpha = 0
-            dView.userInteractionEnabled = false
+            dView.userInteractionEnabled = true
+            
+            var tapGesture = UITapGestureRecognizer(target: self, action: "handleTapGestureOnDarkView:")
+            dView.addGestureRecognizer(tapGesture)
             centerViewController.view.addSubview(dView)
+            darkViewTapGesture = tapGesture
             darkView = dView
         }
     }
